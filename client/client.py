@@ -6,12 +6,11 @@ class Client:
         self.stats = Statistic()
 
     def Register(self):
-        pass
+        self.stats.service.register()
 
     def Login(self):
-        pass
+        self.stats.service.login()
 
-        
     def run(self) -> None:
         print(gigachad.img)
         print("|--------------------------------------------|")
@@ -29,14 +28,14 @@ class Client:
             print("Goodbye!")
             exit()
 
-        def auth():
-            print("You want to login or register? (l/r): ")
-            choise = input()
-            if choise == "l":
-                self.Login()
-            elif choise == "r":
-                self.Register()
-            else:
-                print("Invalid input")
-                self.auth()
+    def auth(self):
+        print("You want to login or register? (l/r): ")
+        choise = input()
+        if choise == "l":
+            self.Login()
+        elif choise == "r":
+            self.Register()
+        else:
+            print("Invalid input")
+            self.auth()
             
