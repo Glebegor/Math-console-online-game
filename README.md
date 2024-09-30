@@ -1,4 +1,4 @@
-# School project (Gigachad clicker)
+# School project OGCWR (Online Gigachad Clicker With Rating) 
 ## Description
 - Console app
 - Online game
