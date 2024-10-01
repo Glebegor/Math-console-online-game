@@ -26,6 +26,39 @@ class Client:
             print("Goodbye!")
             exit()
 
+        
+
+    def lobby(self) -> None:
+        print("|#################################################|")
+        print("|#                                               #|")
+        print("|#                   -lobby-                     #|")
+        print("|#                                               #|")
+        print("|#################################################|")
+        print("|#---Lobby---#")
+        print("|# 1. Play game")
+        print("|# 2. Show statistics")
+        print("|# 3. Logout")
+        print("|# 4. Exit")
+        print("|#---Lobby---#")
+        choise = input("Write the number of the action you want to do: ")
+
+        if choise == "1":
+            pass
+        elif choise == "2":
+            pass
+        elif choise == "3":
+            self.activeAccountUser = None
+            self.auth()
+            return
+        elif choise == "4":
+            print(myaw.img)
+            print("Goodbye!")
+            exit()
+        else:
+            print("Invalid input.")
+            self.lobby()
+
+
     def activeAccount(self) -> bool:
         with open("./accounts_tokens/tokens.txt", "r") as f:
             tokens = f.readlines()
@@ -48,15 +81,22 @@ class Client:
                     return False
                 else:
                     choise = int(choise)
-                    self.activeAccountUser = ActiveAccount(tokens[choise-1].split(":")[0], tokens[choise-1].split(":")[1])
-                    self.messageSuccess("You are logged in as: " + self.activeAccountUser.username)
-                    return True
+                    e = self.authClient.checkUser(tokens[choise-1].split(":")[0], tokens[choise-1].split(":")[1].strip())
+                    if e == True:
+                        self.activeAccountUser = ActiveAccount(tokens[choise-1].split(":")[0], tokens[choise-1].split(":")[1])
+                        self.messageSuccess("You are logged in as: " + self.activeAccountUser.username)
+                        return True
+                    else:
+                        self.messageError("Invalid username or password.")
+                        return False
             else:
                 return False
 
     def auth(self) -> None:
         if self.activeAccount():
+            self.lobby()
             return
+        
         print("You want to login or register? (l/r, n to exit): ")
         choise = input()
         if choise == "l":
@@ -65,6 +105,7 @@ class Client:
                 self.activeAccountUser = e
                 self.addToken()
                 self.messageSuccess("You are logged in as: " + self.activeAccountUser.username)
+                self.lobby()
                 return
             else:
                 self.messageError("Invalid username or password.")
@@ -76,6 +117,7 @@ class Client:
                 self.activeAccountUser = e
                 self.addToken()
                 self.messageSuccess("You are registered as: " + self.activeAccountUser.username)
+                self.lobby()
                 return
             else:
                 self.messageError("Username already exists.")
@@ -101,7 +143,7 @@ class Client:
     def messageSuccess(self, message: str) -> None:
         print("|--------------!! Success !!-------------#")
         print(f"| Success: {message}")
-        print("| ---------------------------------------#")
+        print("|----------------------------------------#")
 
 
     def messageError(self, message: str) -> None:

@@ -4,3 +4,6 @@
 - Online game
 - Mathematic based game
 - Ratings/wins/stats/etc.
+
+## Config
+You need to create tokenx.txt in accounts_tokens

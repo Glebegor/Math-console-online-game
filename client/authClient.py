@@ -15,7 +15,10 @@ class AuthClientService:
         # json request
         response = requests.post(self.address + "/login", json={"username": name, "password": passwordHash})
         if response.status_code == 200:
-            return True
+            if response.json()['message'] == "Success":
+                return True
+            else:
+                return False
         else:
             return False
         
@@ -24,9 +27,14 @@ class AuthClientService:
         # json request
         response = requests.post(self.address + "/register", json={"username": name, "password": passwordHash})
         if response.status_code == 200:
-            return True
-        if response.status_code == 400:
+            if response.json()['message'] == "Success":
+                return True
+            else:
+                return False
+        else:
             return False
+        
+ 
 
 
 class AuthClient:
@@ -59,6 +67,13 @@ class AuthClient:
         else:
             return None
         return None
+    
+    def checkUser(self, name, passwordHash):
+        getUser = self.service.login(name, passwordHash)
+        if getUser == True:
+            return True
+        else:
+            return False
 
     def hash(self, password):
         m = hashlib.sha256()
