@@ -1,33 +1,44 @@
 import hashlib
 import maskpass
+import requests
 
 class ActiveAccount:
     def __init__(self, username, token):
         self.username = username
         self.token = token
 
-class AuthClientRepository:
+class AuthClientService:
     def __init__(self):
-        pass
+        self.address = "http://127.0.0.1:5000"
 
-    def getUser(self, name, passwordHash):
-        return True
+    def login(self, name, passwordHash):
+        # json request
+        response = requests.post(self.address + "/login", json={"username": name, "password": passwordHash})
+        if response.status_code == 200:
+            return True
+        else:
+            return False
+        
 
-    def create(self, name, passwordHash):
-        return True
-
+    def register(self, name, passwordHash):
+        # json request
+        response = requests.post(self.address + "/register", json={"username": name, "password": passwordHash})
+        if response.status_code == 200:
+            return True
+        if response.status_code == 400:
+            return False
 
 
 class AuthClient:
     def __init__(self): 
-        self.repo = AuthClientRepository()
+        self.service = AuthClientService()
 
     def login(self) -> ActiveAccount:
         name = input("Write your username: ")
         password = maskpass.askpass("Write your password: ")
         passwordHash = self.hash(password)
 
-        getUser = self.repo.getUser(name, passwordHash) 
+        getUser = self.service.login(name, passwordHash) 
 
         if getUser == True:
             user = ActiveAccount(name, passwordHash)
@@ -41,7 +52,7 @@ class AuthClient:
         password = maskpass.askpass("Write your password: ")
         passwordHash = self.hash(password)
 
-        creteUser = self.repo.create(name, passwordHash)
+        creteUser = self.service.register(name, passwordHash)
         if creteUser == True:
             user = ActiveAccount(name, passwordHash)
             return user
