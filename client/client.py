@@ -30,13 +30,13 @@ class Client:
         with open("./accounts_tokens/tokens.txt", "r") as f:
             tokens = f.readlines()
             if len(tokens) != 0:
-                print("#---Accounts---#")
+                print("|#---Accounts---#")
                 for i, token in enumerate(tokens):
-                    print(f"{i+1}. {token.split(":")[0]} - {token.split(":")[1]}".strip())
-                print("#---Accounts---#")
+                    print(f"| {i+1}. {token.split(":")[0]} - {token.split(":")[1]}".strip())
+                print("|#---Accounts---#")
 
                 choise = input("You have saved accounts. Write id of the account if you wanna use them (write n if you want to leave, d if you want to delete acc.): ")
-                if choise == "n":
+                if choise == "n" or choise == "":
                     return False
                 elif choise == "d":
                     choise = input("Write id of the account you want to delete: ")
@@ -44,27 +44,67 @@ class Client:
                     del tokens[choise-1]
                     with open("./accounts_tokens/tokens.txt", "w") as f:
                         f.writelines(tokens)
+                    self.messageSuccess("Account deleted.")
                     return False
                 else:
                     choise = int(choise)
                     self.activeAccountUser = ActiveAccount(tokens[choise-1].split(":")[0], tokens[choise-1].split(":")[1])
+                    self.messageSuccess("You are logged in as: " + self.activeAccountUser.username)
                     return True
             else:
                 return False
 
     def auth(self) -> None:
         if self.activeAccount():
-            print("You are logged in as:", self.activeAccountUser.username)
             return
-
-        print("You want to login or register? (l/r): ")
+        print("You want to login or register? (l/r, n to exit): ")
         choise = input()
         if choise == "l":
-            self.authClient.login()
+            e = self.authClient.login()
+            if e != None:
+                self.activeAccountUser = e
+                self.addToken()
+                self.messageSuccess("You are logged in as: " + self.activeAccountUser.username)
+                return
+            else:
+                self.messageError("Invalid username or password.")
+                self.auth()
+                return
         elif choise == "r":
-            self.authClient.register()
-            pass
+            e = self.authClient.register()
+            if e != None:
+                self.activeAccountUser = e
+                self.addToken()
+                self.messageSuccess("You are registered as: " + self.activeAccountUser.username)
+                return
+            else:
+                self.messageError("Username already exists.")
+                self.auth()
+            return
+        elif choise == "n":
+            print(myaw.img)
+            print("Goodbye!")
+            exit()
         else:
             print("Invalid input.")
             self.auth()
-            
+            return
+        
+    def addToken(self) -> None:
+        for i in open("./accounts_tokens/tokens.txt", "r").readlines():
+            if i.split(":")[0] == self.activeAccountUser.username:
+                return
+
+        with open("./accounts_tokens/tokens.txt", "a") as f:
+            f.write(f"{self.activeAccountUser.username}:{self.activeAccountUser.token}\n")
+              
+    def messageSuccess(self, message: str) -> None:
+        print("|--------------!! Success !!-------------#")
+        print(f"| Success: {message}")
+        print("| ---------------------------------------#")
+
+
+    def messageError(self, message: str) -> None:
+        print("|--------------!! Error !!-------------#")
+        print(f"| Error: {message}")
+        print("|--------------------------------------#")

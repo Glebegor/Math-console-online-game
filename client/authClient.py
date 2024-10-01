@@ -1,18 +1,59 @@
+import hashlib
+import maskpass
 
 class ActiveAccount:
     def __init__(self, username, token):
         self.username = username
         self.token = token
 
+class AuthClientRepository:
+    def __init__(self):
+        pass
+
+    def getUser(self, name, passwordHash):
+        return True
+
+    def create(self, name, passwordHash):
+        return True
+
+
+
 class AuthClient:
     def __init__(self): 
-        pass
+        self.repo = AuthClientRepository()
 
-    def login(self):
-        pass
+    def login(self) -> ActiveAccount:
+        name = input("Write your username: ")
+        password = maskpass.askpass("Write your password: ")
+        passwordHash = self.hash(password)
 
-    def register(self):
-        pass
+        getUser = self.repo.getUser(name, passwordHash) 
 
-    def getAllTokens(self):
-        pass
+        if getUser == True:
+            user = ActiveAccount(name, passwordHash)
+            return user
+        else:
+            return None
+        return None
+
+    def register(self) -> ActiveAccount:
+        name = input("Write your username: ")
+        password = maskpass.askpass("Write your password: ")
+        passwordHash = self.hash(password)
+
+        creteUser = self.repo.create(name, passwordHash)
+        if creteUser == True:
+            user = ActiveAccount(name, passwordHash)
+            return user
+        else:
+            return None
+        return None
+
+    def hash(self, password):
+        m = hashlib.sha256()
+        m.update(password.encode())
+        passwordHash = m.hexdigest()
+        return passwordHash
+
+
+        
