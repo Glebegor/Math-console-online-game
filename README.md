@@ -2,6 +2,6 @@
 ## Description
 - Console app
 - Online game
-- Clicker based game
-- Ratings
+- Mathematic based game
+- Ratings/wins/stats/etc.
 
