@@ -1,12 +1,12 @@
-from statistic import Statistic
 from SmbolicImages import gigachad, myaw, frog
 from authClient import AuthClient, ActiveAccount
+from statisticClient import StatisticClient
 import os
 
 class Client:
     def __init__(self) -> None:
-        self.stats = Statistic()
         self.authClient = AuthClient()
+        self.statisticClient = StatisticClient()
         self.activeAccountUser = None
         self.root = False
 
@@ -52,7 +52,28 @@ class Client:
         if choise == "1":
             pass
         elif choise == "2":
-            pass
+            os.system('clear')
+            stats = self.statisticClient.GetStats(self.activeAccountUser.username)
+            print("|#---Statistics---#")
+            if stats == "Error":
+                print("|# Error while getting statistics.")
+            else:
+                print("|# Statistics for: " + self.activeAccountUser.username)
+                if stats['count_of_games'] == 0:
+                    print("|# Win rate: " + "-%")
+                else:
+                    print("|# Win rate: " + round(stats['count_of_wins']/stats['count_of_games']) + "%")
+                print("|# Total games: " + str(stats['count_of_games']))
+                print("|# Total wins: " + str(stats['count_of_wins']))
+                print("|# Total loses: " + str(stats['count_of_loses']))
+                print("|# Biggest streak: " + str(stats['bigger_win_streak']))
+                print("|# Win streak: " + str(stats['win_streak']))
+                print("|# Biggest number: " + str(stats['biggest_number']))
+                print("|# Rating: " + str(stats['rating']))
+            print("|#---Statistics---#")
+            input("Press enter to continue...")
+            self.lobby()
+            return
         elif choise == "3":
             os.system('clear')
             self.activeAccountUser = None
@@ -66,9 +87,11 @@ class Client:
             self.root = True
             input("Press enter to continue...")
             self.lobby()
+            return
         else:
             print("Invalid input.")
             self.lobby()
+            return
 
 
     def activeAccount(self) -> bool:
@@ -80,12 +103,12 @@ class Client:
                 for i, token in enumerate(tokens):
                     print(f"|# {i+1}. {token.split(":")[0]} - {token.split(":")[1]}".strip()[:50] + "...")
                 print("|#---Accounts---#")
-                print("|# 1. Login/Register other account")
-                print("|# 2. Delete account")
+                print("|# a. Login/Register other account")
+                print("|# b. Delete account")
                 choise = input("|# You have saved accounts. Write id of the account to login: ")
-                if choise == "1" or choise == "":
+                if choise == "a" or choise == "":
                     return False
-                elif choise == "2":
+                elif choise == "b":
                     choise = input("Write id of the account you want to delete: ")
                     choise = int(choise)
                     del tokens[choise-1]
@@ -115,7 +138,6 @@ class Client:
             self.lobby()
             return
         
-        os.system('clear')
         print("|#################################################|")
         print("|# 1. Login")
         print("|# 2. Register")
@@ -127,6 +149,7 @@ class Client:
                 self.activeAccountUser = e
                 self.addToken()
                 self.messageSuccess("You are logged in as: " + self.activeAccountUser.username)
+                input("Press enter to continue...")
                 self.lobby()
                 return
             else:
@@ -139,6 +162,7 @@ class Client:
                 self.activeAccountUser = e
                 self.addToken()
                 self.messageSuccess("You are registered as: " + self.activeAccountUser.username)
+                input("Press enter to continue...")
                 self.lobby()
                 return
             else:

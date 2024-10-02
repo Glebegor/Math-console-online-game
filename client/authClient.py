@@ -1,6 +1,7 @@
 import hashlib
 import maskpass
 import requests
+from config import globalAddress
 
 class ActiveAccount:
     def __init__(self, username, token):
@@ -9,7 +10,7 @@ class ActiveAccount:
 
 class AuthClientService:
     def __init__(self):
-        self.address = "http://127.0.0.1:5000"
+        self.address = globalAddress
 
     def login(self, name, passwordHash):
         # json request
