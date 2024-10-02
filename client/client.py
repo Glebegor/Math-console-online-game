@@ -1,34 +1,41 @@
 from statistic import Statistic
-from SmbolicImages import gigachad, myaw
+from SmbolicImages import gigachad, myaw, frog
 from authClient import AuthClient, ActiveAccount
+import os
 
 class Client:
     def __init__(self) -> None:
         self.stats = Statistic()
         self.authClient = AuthClient()
         self.activeAccountUser = None
+        self.root = False
 
 
     def run(self) -> None:
-        print(gigachad.img)
-        print("|--------------------------------------------|")
-        print("|############################################|")
-        print("|# Running client...                        #|")
-        print("|############################################|")
-        print("|--------------------------------------------|")
 
-        print("Welcome to the client!")
-        choise = input("Do you wanna play a math game? (y/n) ")
-        if choise == "y":
+        os.system("clear")
+        print(gigachad.img)
+        print("|#################################################|")
+        print("|#                                               #|")
+        print("|#               -running client-                #|")
+        print("|#                                               #|")
+        print("|#################################################|")
+
+        print("|#-----Welcome to the client!-----#")
+        print("|# 1. Yes")
+        print("|# 2. No")
+
+        choise = input("|# Do you wanna play a math game? ")
+        if choise == "1":
+            os.system('clear')
             self.auth()
         else:
-            print(myaw.img)
-            print("Goodbye!")
-            exit()
+            self.goodbye()
 
         
 
     def lobby(self) -> None:
+        os.system('clear')
         print("|#################################################|")
         print("|#                                               #|")
         print("|#                   -lobby-                     #|")
@@ -40,38 +47,45 @@ class Client:
         print("|# 3. Logout")
         print("|# 4. Exit")
         print("|#---Lobby---#")
-        choise = input("Write the number of the action you want to do: ")
+        choise = input("|# Write the number of the action you want to do: ")
 
         if choise == "1":
             pass
         elif choise == "2":
             pass
         elif choise == "3":
+            os.system('clear')
             self.activeAccountUser = None
             self.auth()
             return
         elif choise == "4":
-            print(myaw.img)
-            print("Goodbye!")
-            exit()
+            self.goodbye()
+        elif choise == "secret":
+            os.system('clear')
+            print(frog.img)
+            self.root = True
+            input("Press enter to continue...")
+            self.lobby()
         else:
             print("Invalid input.")
             self.lobby()
 
 
     def activeAccount(self) -> bool:
+        os.system('clear')
         with open("./accounts_tokens/tokens.txt", "r") as f:
             tokens = f.readlines()
             if len(tokens) != 0:
-                print("|#---Accounts---#")
+                print("|################")
                 for i, token in enumerate(tokens):
-                    print(f"| {i+1}. {token.split(":")[0]} - {token.split(":")[1]}".strip())
+                    print(f"|# {i+1}. {token.split(":")[0]} - {token.split(":")[1]}".strip()[:50] + "...")
                 print("|#---Accounts---#")
-
-                choise = input("You have saved accounts. Write id of the account if you wanna use them (write n if you want to leave, d if you want to delete acc.): ")
-                if choise == "n" or choise == "":
+                print("|# 1. Login/Register other account")
+                print("|# 2. Delete account")
+                choise = input("|# You have saved accounts. Write id of the account to login: ")
+                if choise == "1" or choise == "":
                     return False
-                elif choise == "d":
+                elif choise == "2":
                     choise = input("Write id of the account you want to delete: ")
                     choise = int(choise)
                     del tokens[choise-1]
@@ -80,6 +94,10 @@ class Client:
                     self.messageSuccess("Account deleted.")
                     return False
                 else:
+                    try:
+                        int(choise)
+                    except:
+                        return self.activeAccount()
                     choise = int(choise)
                     e = self.authClient.checkUser(tokens[choise-1].split(":")[0], tokens[choise-1].split(":")[1].strip())
                     if e == True:
@@ -87,7 +105,7 @@ class Client:
                         self.messageSuccess("You are logged in as: " + self.activeAccountUser.username)
                         return True
                     else:
-                        self.messageError("Invalid username or password.")
+                        self.messageError("Invalid username or token.")
                         return False
             else:
                 return False
@@ -97,9 +115,13 @@ class Client:
             self.lobby()
             return
         
-        print("You want to login or register? (l/r, n to exit): ")
+        os.system('clear')
+        print("|#################################################|")
+        print("|# 1. Login")
+        print("|# 2. Register")
+        print("|# Do you want to login or register? (n to exit): ")
         choise = input()
-        if choise == "l":
+        if choise == "1":
             e = self.authClient.login()
             if e != None:
                 self.activeAccountUser = e
@@ -111,7 +133,7 @@ class Client:
                 self.messageError("Invalid username or password.")
                 self.auth()
                 return
-        elif choise == "r":
+        elif choise == "2":
             e = self.authClient.register()
             if e != None:
                 self.activeAccountUser = e
@@ -124,9 +146,7 @@ class Client:
                 self.auth()
             return
         elif choise == "n":
-            print(myaw.img)
-            print("Goodbye!")
-            exit()
+            self.goodbye()
         else:
             print("Invalid input.")
             self.auth()
@@ -141,12 +161,20 @@ class Client:
             f.write(f"{self.activeAccountUser.username}:{self.activeAccountUser.token}\n")
               
     def messageSuccess(self, message: str) -> None:
+        os.system('clear')
         print("|--------------!! Success !!-------------#")
         print(f"| Success: {message}")
         print("|----------------------------------------#")
 
 
     def messageError(self, message: str) -> None:
+        os.system('clear')
         print("|--------------!! Error !!-------------#")
         print(f"| Error: {message}")
         print("|--------------------------------------#")
+
+    def goodbye(self) -> None:
+        os.system('clear')
+        print(myaw.img)
+        print("|# ------- Goodbye! ------- #|")
+        exit()
