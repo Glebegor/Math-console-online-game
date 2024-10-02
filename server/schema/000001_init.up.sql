@@ -16,3 +16,12 @@ CREATE TABLE statistic (
     rating INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE  -- Enforce referential integrity
 );
+
+CREATE TABLE rooms (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- Use AUTOINCREMENT for SQLite
+    balance INTEGER NOT NULL DEFAULT 10000,
+    creator_id INTEGER NOT NULL,
+    opponent_id INTEGER,
+    FOREIGN KEY (creator_id) REFERENCES users (id) ON DELETE CASCADE  -- Enforce referential integrity
+);
+
