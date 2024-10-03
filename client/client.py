@@ -1,12 +1,14 @@
 from SmbolicImages import gigachad, myaw, frog
 from authClient import AuthClient, ActiveAccount
 from statisticClient import StatisticClient
+from gameClient import GameClient
 import os
 
 class Client:
     def __init__(self) -> None:
         self.authClient = AuthClient()
         self.statisticClient = StatisticClient()
+        self.GameClient = GameClient()
         self.activeAccountUser = None
         self.root = False
 
@@ -50,7 +52,26 @@ class Client:
         choise = input("|# Write the number of the action you want to do: ")
 
         if choise == "1":
-            pass
+            os.system('clear')
+            print("|#################################################|")
+            print("|#                                               #|")
+            print("|#                 -Math game-                   #|")
+            print("|#                                               #|")
+            print("|#################################################|")
+            print("|#---Math Game---#")
+            print("|# 1. Search game")
+            print("|# 2. Create game")
+            print("|# 3. Back")
+            print("|#---Math Game---#")
+            localChoise = input("|# Write the number of the action you want to do: ")
+            if localChoise == "1":               
+                games = self.GameClient.GetGames()
+            elif localChoise == "2":
+                game = self.GameClient.CreateGame()
+            elif localChoise == "3":
+                self.lobby()
+                return
+
         elif choise == "2":
             os.system('clear')
             stats = self.statisticClient.GetStats(self.activeAccountUser.username)
