@@ -80,7 +80,7 @@ def statistic(name):
 
 
 # Rooms
-@app.route("/rooms/", methods=["GET"])
+@app.route("/rooms", methods=["GET"])
 def getRooms():
     with createConnection() as conn:
         cursor = conn.cursor()

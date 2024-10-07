@@ -1,11 +1,16 @@
-
+from config import globalAddress
+import requests
 
 class GameClient:
     def __init__(self) -> None:
-        pass
+        self.address = globalAddress
 
     def GetGames(self):
-        pass
+        response = requests.get(self.address + "/rooms")
+        if response.status_code == 200 :
+            return response.json()
+        else:
+            return "Error"
 
     def CreateGame(self):
         pass
