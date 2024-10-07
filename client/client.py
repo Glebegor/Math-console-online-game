@@ -15,7 +15,7 @@ class Client:
 
     def run(self) -> None:
 
-        os.system("clear")
+        os.system("cls")
         print(gigachad.img)
         print("|#################################################|")
         print("|#                                               #|")
@@ -29,7 +29,7 @@ class Client:
 
         choise = input("|# Do you wanna play a math game? ")
         if choise == "1":
-            os.system('clear')
+            os.system('cls')
             self.auth()
         else:
             self.goodbye()
@@ -37,7 +37,7 @@ class Client:
         
 
     def lobby(self) -> None:
-        os.system('clear')
+        os.system('cls')
         print("|#################################################|")
         print("|#                                               #|")
         print("|#                   -lobby-                     #|")
@@ -52,7 +52,7 @@ class Client:
         choise = input("|# Write the number of the action you want to do: ")
 
         if choise == "1":
-            os.system('clear')
+            os.system('cls')
             print("|#################################################|")
             print("|#                                               #|")
             print("|#                 -Math game-                   #|")
@@ -73,7 +73,7 @@ class Client:
                 return
 
         elif choise == "2":
-            os.system('clear')
+            os.system('cls')
             stats = self.statisticClient.GetStats(self.activeAccountUser.username)
             print("|#---Statistics---#")
             if stats == "Error":
@@ -96,14 +96,14 @@ class Client:
             self.lobby()
             return
         elif choise == "3":
-            os.system('clear')
+            os.system('cls')
             self.activeAccountUser = None
             self.auth()
             return
         elif choise == "4":
             self.goodbye()
         elif choise == "secret":
-            os.system('clear')
+            os.system('cls')
             print(frog.img)
             self.root = True
             input("Press enter to continue...")
@@ -116,13 +116,13 @@ class Client:
 
 
     def activeAccount(self) -> bool:
-        os.system('clear')
+        os.system('cls')
         with open("./accounts_tokens/tokens.txt", "r") as f:
             tokens = f.readlines()
             if len(tokens) != 0:
                 print("|################")
                 for i, token in enumerate(tokens):
-                    print(f"|# {i+1}. {token.split(":")[0]} - {token.split(":")[1]}".strip()[:50] + "...")
+                    print(f"|# {i+1}. {token.split(':')[0]} - {token.split(':')[1]}".strip()[:50] + "...")
                 print("|#---Accounts---#")
                 print("|# a. Login/Register other account")
                 print("|# b. Delete account")
@@ -206,20 +206,20 @@ class Client:
             f.write(f"{self.activeAccountUser.username}:{self.activeAccountUser.token}\n")
               
     def messageSuccess(self, message: str) -> None:
-        os.system('clear')
+        os.system('cls')
         print("|--------------!! Success !!-------------#")
         print(f"| Success: {message}")
         print("|----------------------------------------#")
 
 
     def messageError(self, message: str) -> None:
-        os.system('clear')
+        os.system('cls')
         print("|--------------!! Error !!-------------#")
         print(f"| Error: {message}")
         print("|--------------------------------------#")
 
     def goodbye(self) -> None:
-        os.system('clear')
+        os.system('cls')
         print(myaw.img)
         print("|# ------- Goodbye! ------- #|")
         exit()

@@ -79,6 +79,16 @@ def statistic(name):
             return jsonify({"message": "User not found"}), 404
 
 
+# Rooms
+@app.route("/rooms/", methods=["GET"])
+def getRooms():
+    with createConnection() as conn:
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT * FROM rooms")
+        rooms = cursor.fetchall()
+
+        return jsonify(dict(rooms))
 
 if __name__ == "__main__":
     CORS(app, supports_credentials=True)
