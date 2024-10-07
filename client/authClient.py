@@ -15,7 +15,7 @@ class AuthClientService:
     def login(self, name, passwordHash):
         # json request
         response = requests.post(self.address + "/login", json={"username": name, "password": passwordHash})
-        if response.status_code == 200:
+        if response.status_code == 200 or response.status_code == 201:
             if response.json()['message'] == "Success":
                 return True
             else:
@@ -27,7 +27,7 @@ class AuthClientService:
     def register(self, name, passwordHash):
         # json request
         response = requests.post(self.address + "/register", json={"username": name, "password": passwordHash})
-        if response.status_code == 200:
+        if response.status_code == 200 or response.status_code == 201:
             if response.json()['message'] == "Success":
                 return True
             else:

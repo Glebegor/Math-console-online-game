@@ -19,9 +19,6 @@ CREATE TABLE statistic (
 
 CREATE TABLE rooms (
     id INTEGER PRIMARY KEY AUTOINCREMENT,  -- Use AUTOINCREMENT for SQLite
-    balance INTEGER NOT NULL DEFAULT 10000,
-    creator_id INTEGER NOT NULL,
-    opponent_id INTEGER,
-    FOREIGN KEY (creator_id) REFERENCES users (id) ON DELETE CASCADE  -- Enforce referential integrity
+    balance INTEGER NOT NULL DEFAULT 10000
 );
 
