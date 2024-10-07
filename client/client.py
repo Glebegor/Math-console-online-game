@@ -65,9 +65,35 @@ class Client:
             print("|#---Math Game---#")
             localChoise = input("|# Write the number of the action you want to do: ")
             if localChoise == "1":               
+                os.system('clear')
                 games = self.GameClient.GetGames()
+                print("|#################################################|")
+                print("|#                                               #|")
+                print("|#                   -Rooms-                     #|")
+                print("|#                                               #|")
+                print("|#################################################|")
+                for(i, game) in enumerate(games):
+                    print(f"|# {i+1}. ++{game['name']}++ @{game['playerName1']}: {game['balance']}int")
+                print("|#---Rooms---#")
+                print("|# a. To leave seaching room.")
+                choiseRoom = input("|# Write the number of the room you want to join: ")
+                if choiseRoom == "a" or choiseRoom == "":
+                    self.lobby()
+                    return
+                else:
+                    pass # Connection to room
+
             elif localChoise == "2":
-                game = self.GameClient.CreateGame()
+                name = input("Write the name of the room: ")
+                playerName = self.activeAccountUser.username
+                balance = int(input("Write the balance of the room(default 10000): "))
+                game = self.GameClient.CreateGame(name, playerName, balance)
+                if game == "Error":
+                    self.messageError("Error while creating game.")
+                    self.lobby()
+                    return
+                else:
+                    pass # Connection to room
             elif localChoise == "3":
                 self.lobby()
                 return

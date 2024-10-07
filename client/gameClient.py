@@ -12,5 +12,9 @@ class GameClient:
         else:
             return "Error"
 
-    def CreateGame(self):
-        pass
+    def CreateGame(self, name, playerName, balance):
+        response = requests.post(self.address + "/rooms", json={"name": name, "playerName": playerName, "balance": balance})
+        if response.status_code == 200 or response.status_code == 201:
+            return response.json()
+        else:
+            return "Error"
